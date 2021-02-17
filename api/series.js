@@ -110,6 +110,34 @@ seriesRouter.put('/:seriesId', (req, res, next) => {
     }
 });
 
-
+seriesRouter.delete('/:seriesId', (req, res, next) => {
+    // check if the series has a related issue in the Issue table
+    db.get(
+        'SELECT * FROM Issue WHERE series_id=$seriesId',
+        {$seriesId: req.params.seriesId},
+        (err, issue) => {
+            if(err) {
+                next(err);
+            } else if(issue) {
+                // if the series has a related issue, return a 400 response
+                // so request won't be processed
+                res.send(400).send();
+            } else {
+                // if there's no related issue to the series, delete the series
+                db.run(
+                    'DELETE FROM Series WHERE id=$seriesId',
+                    {$seriesId: req.params.seriesId},
+                    (err) => {
+                        if(err) {
+                            next(err);
+                        } else {
+                            res.status(204).send();
+                        }
+                    }
+                )
+            }
+        }
+    )
+})
 
 module.exports = seriesRouter;

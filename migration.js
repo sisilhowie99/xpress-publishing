@@ -6,27 +6,27 @@ db.serialize(() => {
     db.run(
         `CREATE TABLE IF NOT EXISTS Artist (
             id INTEGER NOT NULL PRIMARY KEY,
-            name TEXT NOT NULL REQUIRED,
-            date_of_birth TEXT NOT NULL REQUIRED,
-            biography TEXT NOT NULL REQUIRED,
-            is_currently_employed INTEGER NOT NULL REQUIRED DEFAULT 1
+            name TEXT NOT NULL,
+            date_of_birth TEXT NOT NULL,
+            biography TEXT NOT NULL,
+            is_currently_employed INTEGER NOT NULL DEFAULT 1
         )`
     );
     db.run(
         `CREATE TABLE IF NOT EXISTS Series (
             id INTEGER NOT NULL PRIMARY KEY,
-            name TEXT REQUIRED,
-            description TEXT REQUIRED
+            name TEXT NOT NULL,
+            description TEXT NOT NULL
         )`
     );
     db.run(
         `CREATE TABLE IF NOT EXISTS Issue (
             id INTEGER NOT NULL PRIMARY KEY,
-            name TEXT NOT NULL REQUIRED,
-            issue_number INTEGER NOT NULL REQUIRED,
-            publication_date TEXT NOT NULL REQUIRED,
-            artist_id INTEGER NOT NULL REQUIRED,
-            series_id INTEGER NOT NULL REQUIRED,
+            name TEXT NOT NULL NOT NULL,
+            issue_number INTEGER NOT NULL NOT NULL,
+            publication_date TEXT NOT NULL NOT NULL,
+            artist_id INTEGER NOT NULL NOT NULL,
+            series_id INTEGER NOT NULL NOT NULL,
             FOREIGN KEY (artist_id) REFERENCES Artist (id),
             FOREIGN KEY (series_id) REFERENCES Series (id)
         )`
